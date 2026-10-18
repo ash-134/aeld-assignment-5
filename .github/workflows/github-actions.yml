@@ -7,17 +7,21 @@ on:
     branches: [ main, master ]
 
 jobs:
-  fast-verify:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify Assignment 5 Socket Server Files
+      - name: Compile and Test Socket Server
         run: |
-          echo "檢查 server/aesdsocket.c 是否存在..."
-          test -f server/aesdsocket.c
-          echo "檢查 server/Makefile 是否存在..."
-          test -f server/Makefile
-          echo "檢查 git tags..."
-          git tag
-          echo "Assignment 5 檔案驗證 100% 通過！"
+          echo "開始編譯 server..."
+          cd server
+          make
+          echo "測試背景 Daemon 模式啟動..."
+          ./aesdsocket -d
+          sleep 1
+          echo "檢查程序是否正在運行..."
+          pgrep aesdsocket
+          echo "關閉行程..."
+          pkill aesdsocket
+          echo "編譯與測試全部成功！"
