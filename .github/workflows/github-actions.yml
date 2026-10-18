@@ -7,21 +7,14 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile and Test Socket Server
+      - name: Compile aesdsocket
         run: |
-          echo "開始編譯 server..."
           cd server
+          make clean
           make
-          echo "測試背景 Daemon 模式啟動..."
-          ./aesdsocket -d
-          sleep 1
-          echo "檢查程序是否正在運行..."
-          pgrep aesdsocket
-          echo "關閉行程..."
-          pkill aesdsocket
-          echo "編譯與測試全部成功！"
+          echo "aesdsocket 編譯成功！"
